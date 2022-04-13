@@ -1,0 +1,59 @@
+clic - Command Line Interface Calculator
+========================================
+
+A simple commandline calculator (shell) that uses Dijkstra's shunting-yard
+algotithm (https://en.wikipedia.org/wiki/Shunting-yard_algorithm) for parsing
+and calculating/evaluating the arithmetic expression.
+
+Supported operators:
+	- addition +
+	- subtraction -
+	- multiplication *
+	- division /
+	- parenthesis ( )
+
+
+Building clic
+=============
+
+In order to build the clic, cd to the clic repository and run make. After the
+make is run successfully, a clic executable should appear.
+$ cd clic
+$ make
+gcc -c stack.c -Wall
+gcc -c clic.c -Wall
+gcc clic.o stack.o -o clic -Wall
+$ ls
+LICENSE  Makefile  README  clic  clic.c  clic.o  stack.c  stack.h  stack.o
+$
+
+Running clic
+============
+
+After the clic is built, run ./clic to launch clic. When the clic is running
+a shell like prompt should appear
+
+$ ./clic
+>>>
+
+Now you can use the prompt as a normal calculator. To evaluate the expression
+press <Enter>.
+
+Examples:
+
+>>> 1+1
+= 2.000000
+>>>
+>>> 5*(-3)
+= -15.000000
+>>> 0-3
+= -3.00000
+
+To exit the clic shell type exit.
+
+>>> exit
+$
+
+
+
+
