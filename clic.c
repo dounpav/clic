@@ -208,6 +208,7 @@ static int parse_expression(const char *expr)
 				}
 				else {
 					ret = ERR_MATH;
+					free(str);
 					goto parse_exit;
 				}
 			}
@@ -391,7 +392,11 @@ static int evaluate_expression(long double *result)
 
 			tokens[i] = stack_pop(&out_stack);
 			if (tokens[i] == NULL) {
-				ret = -1;
+
+				ret = ERR_SYNTAX;
+				free(tokens[0]);
+				free(tokens[1]);
+				free(tokens[2]);
 				goto eval_exit;
 			}
 		}
@@ -426,6 +431,9 @@ static int evaluate_expression(long double *result)
 				free(tokens[2]);
 			}
 			else {
+				free(tokens[0]);
+				free(tokens[1]);
+				free(tokens[2]);
 				break;
 			}
 		}
@@ -486,20 +494,18 @@ int main(void)
 
 		if (strlen(expr) > 0) {
 
-			if (strcmp(expr, "exit") == 0) {
-				free_memory(&out_stack);
-				break;
-			}
+			if (strcmp(expr, "exit") == 0) break;
 
 			ret = parse_expression(expr);
-			if (ret != ERR_SUCC) {
-				print_error(ret);
-				continue;
-			}
-
-			ret = evaluate_expression(&result);
 			if (ret == ERR_SUCC) {
-				fprintf(stdout, "= %Lf\n", result);
+
+				ret = evaluate_expression(&result);
+				if (ret == ERR_SUCC) {
+					fprintf(stdout, "= %Lf\n", result);
+				}
+				else {
+					print_error(ret);
+				}
 			}
 			else {
 				print_error(ret);
