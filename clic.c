@@ -417,14 +417,10 @@ static int evaluate_expression(long double *result)
 				tokens[0]->type = TOKEN_TYPE_NUM;
 				stack_push(&out_stack, tokens[0]);
 
-				//printf("stack top --> %Lf\n", out_stack.top->val);
-
 				while (tmp_stack.size != 0) {
 					token = stack_pop(&tmp_stack);
 					stack_push(&out_stack, token);
 				}
-				// printf("stack top type --> %d\n", out_stack.top->type);
-
 				free(tokens[1]);
 				free(tokens[2]);
 			}
