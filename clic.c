@@ -405,7 +405,8 @@ static int evaluate_expression(long double *result)
 				tokens[1]->type == TOKEN_TYPE_NUM &&
 				tokens[2]->type == TOKEN_TYPE_NUM)
 		{
-			if (calculate(tokens, &res) == 0) {
+			ret = calculate(tokens, &res);
+			if (ret == ERR_SUCC) {
 
 				/*
 				 * Reuse one token for the result and push it
@@ -425,9 +426,7 @@ static int evaluate_expression(long double *result)
 				free(tokens[2]);
 			}
 			else {
-				ret = -1;
 				break;
-
 			}
 		}
 		else{
