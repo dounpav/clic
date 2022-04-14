@@ -28,8 +28,8 @@ int stack_push(Stack_t *stack, Token_t *token)
 
 Token_t *stack_pop(Stack_t *stack)
 {
-	Token_t *old_top;
-	Token_t *new_top;
+	Token_t *old_top = NULL;
+	Token_t *new_top = NULL;
 
 	if (stack) {
 
