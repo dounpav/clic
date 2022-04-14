@@ -60,7 +60,7 @@ static int string_to_longdouble(const char *str, long double *value)
 	else if (*endp != '\0') {
 		ret = ERR_SYNTAX;
 	}
-	else if (*endp == *str) {
+	else if (endp == str) {
 		ret = ERR_SYNTAX;
 	}
 	else {
