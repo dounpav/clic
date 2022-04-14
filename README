@@ -2,7 +2,7 @@ clic - Command Line Interface Calculator
 ========================================
 
 A simple commandline calculator (shell) that uses Dijkstra's shunting-yard
-algotithm (https://en.wikipedia.org/wiki/Shunting-yard_algorithm) for parsing
+algorithm (https://en.wikipedia.org/wiki/Shunting-yard_algorithm) for parsing
 and calculating/evaluating the arithmetic expression.
 
 Supported operators:
