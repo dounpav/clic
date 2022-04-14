@@ -470,6 +470,7 @@ static void print_error(int err)
 
 		default:
 			fprintf(stderr, "Unknown Error");
+			break;
 	}
 }
 
