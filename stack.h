@@ -1,3 +1,9 @@
+/*
+ * stack.h
+ *
+ * Author: Pavel (dounpav)
+ */
+
 #ifndef STACK_H
 #define STACK_H
 

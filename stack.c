@@ -1,3 +1,8 @@
+/*
+ * stack.c
+ *
+ * Author: Pavel (dounpav)
+ */
 
 #include"stack.h"
 #include<stdlib.h>

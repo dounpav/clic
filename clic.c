@@ -1,3 +1,8 @@
+/*
+ * clic.c
+ *
+ * Author: Pavel (dounpav)
+ */
 
 #include"stack.h"
 #include<stdio.h>
