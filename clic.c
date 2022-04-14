@@ -35,7 +35,7 @@ inline static long double divide(long double a, long double b)
 	return a / b;
 }
 
-static void free_memory(Stack_t *stack)
+static void free_stack(Stack_t *stack)
 {
 	Token_t *tok = NULL;
 
@@ -512,9 +512,9 @@ int main(void)
 				print_error(ret);
 			}
 
-			free_memory(&out_stack);
-			free_memory(&op_stack);
-			free_memory(&tmp_stack);
+			free_stack(&out_stack);
+			free_stack(&op_stack);
+			free_stack(&tmp_stack);
 		}
 	}
 	free(expr);
