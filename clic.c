@@ -275,7 +275,8 @@ static int parse_expression(const char *expr)
 				 * calculation of ngative numbers.
 				 */
 				if (out_stack.size == 0 &&
-						token->type == TOKEN_TYPE_OP_SUB)
+						(token->type == TOKEN_TYPE_OP_SUB ||
+						token->type == TOKEN_TYPE_OP_ADD))
 				{
 					Token_t *zero = malloc(sizeof(Token_t));
 					if (zero) {
