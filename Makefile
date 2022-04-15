@@ -10,6 +10,6 @@ clic.o: clic.c
 stack.o: stack.c stack.h
 	gcc -c stack.c $(CFLAGS)
 
-clean: clic.o stack.o
-	rm clic.o stack.o
+clean:
+	rm -f clic.o stack.o
 
