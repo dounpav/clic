@@ -15,6 +15,7 @@
 #define ERR_SUCC	 (0)
 #define ERR_SYNTAX	(-1)
 #define ERR_MATH	(-2)
+#define ERR_MALLOC	(-3)
 
 static Stack_t out_stack = {NULL, 0};
 static Stack_t op_stack = {NULL, 0};
@@ -144,13 +145,18 @@ static int parse_operator(char operator, Token_t **token)
 			break;
 	}
 
-	if (ret == 0) {
+	if (ret == ERR_SUCC) {
 
 		tmp = malloc(sizeof(Token_t));
-		tmp->type = type;
-		tmp->op = operator;
-		tmp->precedence = prec;
-		*token = tmp;
+		if (tmp) {
+			tmp->type = type;
+			tmp->op = operator;
+			tmp->precedence = prec;
+			*token = tmp;
+		}
+		else {
+			ret = ERR_MALLOC;
+		}
 	}
 
 	return ret;
@@ -182,9 +188,15 @@ static int parse_expression(const char *expr)
 			}
 			else {
 				str = malloc(sizeof(char) + 1);
-				*str = expr[i];
-				*(str + 1) = '\0';
-				num_part = true;
+				if (str) {
+					*str = expr[i];
+					*(str + 1) = '\0';
+					num_part = true;
+				}
+				else {
+					ret = ERR_MALLOC;
+					break;
+				}
 			}
 		}
 		/* Do not allow whitespaces */
@@ -203,13 +215,20 @@ static int parse_expression(const char *expr)
 				if (string_to_longdouble(str, &value) == 0) {
 
 					token = malloc(sizeof(Token_t));
-					token->val = value;
-					token->type = TOKEN_TYPE_NUM;
-					stack_push(&out_stack, token);
+					if (token) {
+						token->val = value;
+						token->type = TOKEN_TYPE_NUM;
+						stack_push(&out_stack, token);
 
-					prev = token;
-					num_part = false;
-					free(str);
+						prev = token;
+						num_part = false;
+						free(str);
+					}
+					else {
+						ret = ERR_MALLOC;
+						free(str);
+						goto parse_exit;
+					}
 				}
 				else {
 					ret = ERR_MATH;
@@ -259,9 +278,15 @@ static int parse_expression(const char *expr)
 						token->type == TOKEN_TYPE_OP_SUB)
 				{
 					Token_t *zero = malloc(sizeof(Token_t));
-					zero->type = TOKEN_TYPE_NUM;
-					zero->val = 0;
-					stack_push(&out_stack, zero);
+					if (zero) {
+						zero->type = TOKEN_TYPE_NUM;
+						zero->val = 0;
+						stack_push(&out_stack, zero);
+					}
+					else {
+						ret = ERR_MALLOC;
+						goto parse_exit;
+					}
 				}
 				stack_push(&op_stack, token);
 			}
@@ -277,9 +302,15 @@ static int parse_expression(const char *expr)
 						 token->type == TOKEN_TYPE_OP_ADD))
 				{
 					Token_t *zero = malloc(sizeof(Token_t));
-					zero->type = TOKEN_TYPE_NUM;
-					zero->val = 0;
-					stack_push(&out_stack, zero);
+					if (zero) {
+						zero->type = TOKEN_TYPE_NUM;
+						zero->val = 0;
+						stack_push(&out_stack, zero);
+					}
+					else {
+						ret = ERR_MALLOC;
+						goto parse_exit;
+					}
 				}
 
 				/*
@@ -319,10 +350,15 @@ next_char:
 		if (string_to_longdouble(str, &value) == 0) {
 
 			token = malloc(sizeof(Token_t));
-			token->val = value;
-			token->type = TOKEN_TYPE_NUM;
-			stack_push(&out_stack, token);
-			free(str);
+			if (token) {
+				token->val = value;
+				token->type = TOKEN_TYPE_NUM;
+				stack_push(&out_stack, token);
+				free(str);
+			}
+			else {
+				ret = ERR_MALLOC;
+			}
 		}
 	}
 
@@ -468,11 +504,12 @@ static void print_error(int err)
 		case ERR_SYNTAX:
 			fprintf(stderr, "Syntax Error\n");
 			break;
-
 		case ERR_MATH:
 			fprintf(stderr, "Math Error\n");
 			break;
-
+		case ERR_MALLOC:
+			fprintf(stderr, "malloc() failed");
+			break;
 		default:
 			fprintf(stderr, "Unknown Error");
 			break;
